@@ -6,8 +6,10 @@ import { createClient } from '@/lib/supabase/server'
 import { Badge } from '@/components/ui/badge'
 import { MemberInfoForm } from './_components/member-info-form'
 import { PtPackageSection } from './_components/pt-package-section'
+import { ReservationHistorySection } from './_components/reservation-history-section'
 import type { MemberWithProfile, TrainerWithProfile } from '@/lib/types'
 import type { PtPackageRow } from './_components/pt-package-section'
+import type { ReservationHistoryRow } from './_components/reservation-history-section'
 
 interface Props {
   params: Promise<{ id: string }>
@@ -30,7 +32,7 @@ export default async function MemberDetailPage({ params }: Props) {
   const { id } = await params
   const supabase = await createClient()
 
-  const [memberRes, trainersRes, packagesRes] = await Promise.all([
+  const [memberRes, trainersRes, packagesRes, reservationsRes] = await Promise.all([
     supabase
       .from('members')
       .select('*, profiles(*), trainers:assigned_trainer_id(*, profiles(*))')
@@ -46,6 +48,12 @@ export default async function MemberDetailPage({ params }: Props) {
       .select('*, trainers(*, profiles(*)), payments(payment_method)')
       .eq('member_id', id)
       .order('created_at', { ascending: false }),
+    supabase
+      .from('reservations')
+      .select('id, reservation_date, start_time, end_time, status, trainers(profiles(name))')
+      .eq('member_id', id)
+      .order('reservation_date', { ascending: false })
+      .order('start_time', { ascending: false }),
   ])
 
   if (memberRes.error || !memberRes.data) {
@@ -55,6 +63,7 @@ export default async function MemberDetailPage({ params }: Props) {
   const member = memberRes.data as MemberWithProfile
   const trainers = (trainersRes.data ?? []) as TrainerWithProfile[]
   const packages = (packagesRes.data ?? []) as PtPackageRow[]
+  const reservations = (reservationsRes.data ?? []) as unknown as ReservationHistoryRow[]
 
   const trainerOptions = trainers.map((t) => ({
     id: t.id,
@@ -136,6 +145,9 @@ export default async function MemberDetailPage({ params }: Props) {
         packages={packages}
         trainers={trainerOptions}
       />
+
+      {/* 예약 이력 */}
+      <ReservationHistorySection reservations={reservations} />
     </div>
   )
 }
