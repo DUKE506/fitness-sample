@@ -6,139 +6,144 @@
 
 ## Phase 0: 프로젝트 기초 설정
 
-- [ ] 패키지 설치
-  - [ ] `@supabase/ssr` + `@supabase/supabase-js` 설치
-  - [ ] `zustand` 설치
-  - [ ] `date-fns` 설치
-  - [ ] `recharts` 설치
-  - [ ] `zod` 설치
-  - [ ] `@tanstack/react-table` 설치
-  - [ ] `serwist` + `@serwist/next` 설치
-  - [ ] `lucide-react` 설치
-  - [ ] `clsx` + `tailwind-merge` 설치
-  - [ ] `sonner` 설치
-- [ ] Supabase 프로젝트 생성 + 환경변수 설정
-  - [ ] Supabase 프로젝트 생성
-  - [ ] `.env.local` 파일 생성 (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY)
-  - [ ] `.env.local`을 `.gitignore`에 추가 확인
-- [ ] Supabase 클라이언트 셋업
-  - [ ] `lib/supabase/client.ts` (브라우저용)
-  - [ ] `lib/supabase/server.ts` (서버 컴포넌트용, async cookies)
-  - [ ] `lib/supabase/admin.ts` (Service Role 클라이언트)
-- [ ] 유틸리티 함수
-  - [ ] `lib/utils/cn.ts` (clsx + tailwind-merge)
-  - [ ] `lib/utils/date.ts` (date-fns 래퍼)
-  - [ ] `lib/utils/format.ts` (금액 포맷 등)
-  - [ ] `lib/constants.ts` (역할, 상태값 상수)
-- [ ] 한국어 폰트 설정
-  - [ ] Pretendard 웹폰트 적용
-  - [ ] 루트 layout.tsx에 폰트 설정
-- [ ] 자체 UI 컴포넌트 기초 개발
-  - [ ] Button 컴포넌트 (variant: primary, secondary, outline, ghost, danger)
-  - [ ] Input 컴포넌트 (text, password, search)
-  - [ ] Select 컴포넌트
-  - [ ] Dialog/Modal 컴포넌트
-  - [ ] Card 컴포넌트
-  - [ ] Badge 컴포넌트
-  - [ ] Toast 컴포넌트 (sonner 래핑)
-  - [ ] Table 컴포넌트 (@tanstack/react-table 래핑)
-  - [ ] Tabs 컴포넌트
-  - [ ] Spinner/Loading 컴포넌트
-- [ ] 레이아웃 스캐폴딩
-  - [ ] 루트 `app/layout.tsx` (폰트, Providers, 메타데이터)
-  - [ ] `app/(auth)/layout.tsx` (인증 페이지 공통)
-  - [ ] `app/(admin)/layout.tsx` (관리자 사이드바)
-  - [ ] `app/(user)/layout.tsx` (사용자 하단 탭바)
-- [ ] Zustand 스토어 기초
-  - [ ] `stores/use-auth-store.ts` (현재 유저, role)
-  - [ ] `stores/use-schedule-store.ts` (선택 날짜, 뷰 모드)
-  - [ ] `stores/use-reservation-store.ts` (PT 신청 플로우 상태)
+- [x] 패키지 설치
+  - [x] `@supabase/ssr` + `@supabase/supabase-js` 설치
+  - [x] `zustand` 설치
+  - [x] `date-fns` 설치
+  - [x] `recharts` 설치
+  - [x] `zod` 설치
+  - [x] `@tanstack/react-table` 설치
+  - [x] `serwist` + `@serwist/next` 설치
+  - [x] `lucide-react` 설치
+  - [x] `clsx` + `tailwind-merge` 설치
+  - [x] `sonner` 설치
+- [x] Supabase 프로젝트 생성 + 환경변수 설정
+  - [x] Supabase 프로젝트 생성
+  - [x] `.env.local` 파일 생성 (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY)
+  - [x] `.env.local`을 `.gitignore`에 추가 확인
+- [x] Supabase 클라이언트 셋업
+  - [x] `lib/supabase/client.ts` (브라우저용)
+  - [x] `lib/supabase/server.ts` (서버 컴포넌트용, async cookies)
+  - [x] `lib/supabase/admin.ts` (Service Role 클라이언트)
+- [x] 유틸리티 함수
+  - [x] `lib/utils/cn.ts` (clsx + tailwind-merge)
+  - [x] `lib/utils/date.ts` (date-fns 래퍼)
+  - [x] `lib/utils/format.ts` (금액 포맷 등)
+  - [x] `lib/constants.ts` (역할, 상태값 상수)
+- [x] 한국어 폰트 설정
+  - [x] Noto Sans KR 웹폰트 적용 (Google Fonts, globals.css)
+  - [x] 루트 layout.tsx에 폰트 설정
+- [x] 자체 UI 컴포넌트 기초 개발
+  - [x] Button 컴포넌트 (variant: primary, secondary, outline, ghost, danger)
+  - [x] Input 컴포넌트 (text, password, search)
+  - [x] Select 컴포넌트
+  - [x] Dialog/Modal 컴포넌트
+  - [x] Card 컴포넌트
+  - [x] Badge 컴포넌트
+  - [x] Toast 컴포넌트 (sonner 래핑)
+  - [x] Table 컴포넌트 (@tanstack/react-table 래핑)
+  - [x] Tabs 컴포넌트
+  - [x] Spinner/Loading 컴포넌트
+- [x] 레이아웃 스캐폴딩
+  - [x] 루트 `app/layout.tsx` (폰트, Providers, 메타데이터)
+  - [x] `app/(auth)/layout.tsx` (인증 페이지 공통)
+  - [x] `app/(admin)/layout.tsx` (관리자 사이드바)
+  - [x] `app/(user)/layout.tsx` (사용자 하단 탭바)
+- [x] Zustand 스토어 기초
+  - [x] `stores/use-auth-store.ts` (현재 유저, role)
+  - [x] `stores/use-schedule-store.ts` (선택 날짜, 뷰 모드)
+  - [x] `stores/use-reservation-store.ts` (PT 신청 플로우 상태)
 
 ---
 
 ## Phase 1: 데이터베이스 + 인증
 
-- [ ] Supabase 데이터베이스 구축 (참조: `docs/db-schema.md`)
-  - [ ] 전체 테이블 생성 SQL 실행
-  - [ ] RLS 정책 적용
-  - [ ] Database Functions (RPC) 생성
-    - [ ] `get_available_slots(trainer_id, date)`
-    - [ ] `create_reservation_with_session_decrement(...)`
-    - [ ] `cancel_reservation_with_session_restore(...)`
-    - [ ] `get_monthly_revenue(year, month)`
-    - [ ] `get_trainer_revenue(trainer_id, year, month)`
-  - [ ] DB Trigger: 회원가입 시 profiles 자동 생성
-  - [ ] DB Seed: admin 기본 계정 생성 (id: admin, pw: admin)
-- [ ] TypeScript 타입 생성
-  - [ ] `supabase gen types typescript` 실행
-  - [ ] `lib/types/database.ts` 생성
-  - [ ] `lib/types/index.ts` 앱 공통 타입 정의
-- [ ] 인증 구현
+- [x] Supabase 데이터베이스 구축 (참조: `docs/db-schema.md`)
+  - [x] 전체 테이블 생성 SQL 실행
+  - [x] RLS 정책 적용
+  - [x] Database Functions (RPC) 생성
+    - [x] `get_available_slots(trainer_id, date)`
+    - [x] `create_reservation_with_session_decrement(...)`
+    - [x] `cancel_reservation_with_session_restore(...)`
+    - [x] `get_monthly_revenue(year, month)`
+    - [x] `get_trainer_revenue(trainer_id, year, month)`
+  - [x] DB Trigger: 회원가입 시 profiles 자동 생성
+  - [x] DB Seed: admin 기본 계정 생성 (id: admin, pw: admin)
+- [x] TypeScript 타입 생성
+  - [x] `supabase gen types typescript` 실행
+  - [x] `lib/types/database.ts` 생성
+  - [x] `lib/types/index.ts` 앱 공통 타입 정의
+- [x] 인증 구현
   - [ ] 카카오 OAuth 설정 (Kakao Developers 앱 등록 + Supabase Provider 설정)
-  - [ ] 로그인 페이지 개발 (`app/(auth)/login/page.tsx`)
-    - [ ] 카카오 로그인 버튼 (회원용)
-    - [ ] 관리자 로그인 폼 (ID/PW 입력, admin/trainer용)
-    - [ ] 개발용 임시 회원가입 기능
-  - [ ] OAuth 콜백 Route Handler (`app/api/auth/callback/route.ts`)
-  - [ ] `proxy.ts` 인증 가드 구현
-    - [ ] 공개 경로 통과 처리
-    - [ ] 미인증 시 `/login` 리다이렉트
-    - [ ] admin 경로 role 체크
-  - [ ] Server Actions (`actions/auth.ts`)
-    - [ ] 관리자 ID/PW 로그인 액션
-    - [ ] 로그아웃 액션
-- [ ] Zod 유효성 검증 스키마
-  - [ ] `lib/validations/reservation.ts`
-  - [ ] `lib/validations/trainer.ts`
-  - [ ] `lib/validations/member.ts`
-- [ ] 개발용 mockup 데이터 시드 스크립트
+  - [x] 로그인 페이지 개발 (`app/(auth)/login/page.tsx`)
+    - [ ] 카카오 로그인 버튼 (회원용) — 추후 활성화
+    - [x] 관리자 로그인 폼 (ID/PW 입력, admin/trainer용)
+    - [x] 개발용 임시 회원가입 기능
+  - [x] OAuth 콜백 Route Handler (`app/api/auth/callback/route.ts`)
+  - [x] `proxy.ts` 인증 가드 구현
+    - [x] 공개 경로 통과 처리
+    - [x] 미인증 시 `/login` 리다이렉트
+    - [x] admin 경로 role 체크
+  - [x] Server Actions (`actions/auth.ts`)
+    - [x] 관리자 ID/PW 로그인 액션
+    - [x] 로그아웃 액션
+- [x] Zod 유효성 검증 스키마
+  - [x] `lib/validations/reservation.ts`
+  - [x] `lib/validations/trainer.ts`
+  - [x] `lib/validations/member.ts`
+- [x] 개발용 mockup 데이터 시드 스크립트
 
 ---
 
 ## Phase 2: 관리자 - 트레이너 관리
 
-- [ ] 관리자 레이아웃 컴포넌트
-  - [ ] `components/layout/admin-sidebar.tsx` (사이드바 네비게이션)
-    - [ ] 메뉴 항목: 대시보드, 트레이너관리, 회원관리, 전체스케줄, 매출관리
-    - [ ] 모바일: 햄버거 메뉴 토글
-    - [ ] 현재 경로 활성 상태 표시
-  - [ ] `components/layout/header.tsx` (상단 헤더)
-    - [ ] 사용자 정보 표시
-    - [ ] 로그아웃 버튼
-- [ ] 트레이너 목록 페이지 (`app/(admin)/admin/trainers/page.tsx`)
-  - [ ] 데이터 테이블 구현 (이름, 전문분야, 담당회원수, 활성상태)
+<!-- 세션 2-A: 관리자 레이아웃 컴포넌트 ✅ -->
+- [x] 관리자 레이아웃 컴포넌트
+  - [x] `components/layout/admin-sidebar.tsx` (사이드바 네비게이션)
+    - [x] 메뉴 항목: 대시보드, 트레이너관리, 회원관리, 전체스케줄, 매출관리
+    - [x] 모바일: 햄버거 메뉴 토글
+    - [x] 현재 경로 활성 상태 표시
+  - [x] `components/layout/header.tsx` (상단 헤더)
+    - [x] 사용자 정보 표시
+    - [x] 로그아웃 버튼
+<!-- 세션 2-B: 트레이너 목록 페이지 ✅ -->
+- [x] 트레이너 목록 페이지 (`app/(admin)/admin/trainers/page.tsx`)
+  - [x] 데이터 테이블 구현 (이름, 전문분야, 경력, 활성상태)
   - [ ] 검색 기능
-  - [ ] 트레이너 등록 버튼 → `/admin/trainers/new`
-  - [ ] Server Component에서 Supabase 직접 쿼리
-- [ ] 트레이너 등록 페이지 (`app/(admin)/admin/trainers/new/page.tsx`)
-  - [ ] `components/forms/trainer-form.tsx` 폼 컴포넌트
-    - [ ] 계정 정보 입력 (ID, 비밀번호)
-    - [ ] 기본 정보 입력 (이름, 연락처, 소개글)
-    - [ ] 전문분야 태그 입력
-    - [ ] 자격증 목록 입력
-    - [ ] 경력 연수 입력
-    - [ ] 시간당 요금 입력
+  - [x] 트레이너 등록 버튼 → `/admin/trainers/new`
+  - [x] Server Component에서 Supabase 직접 쿼리
+<!-- 세션 2-C: 트레이너 등록 페이지 + actions/trainers.ts ✅ -->
+- [x] 트레이너 등록 페이지 (`app/(admin)/admin/trainers/new/page.tsx`)
+  - [x] `components/forms/trainer-form.tsx` 폼 컴포넌트
+    - [x] 계정 정보 입력 (이메일, 비밀번호)
+    - [x] 기본 정보 입력 (이름, 연락처, 소개글)
+    - [x] 전문분야 태그 입력
+    - [x] 자격증 목록 입력
+    - [x] 경력 연수 입력
+    - [x] 시간당 요금 입력
     - [ ] 프로필 사진 업로드 (Supabase Storage)
-  - [ ] `actions/trainers.ts` Server Action
-    - [ ] Supabase Admin API로 auth 계정 생성
-    - [ ] profiles 테이블에 role='trainer' 레코드 생성
-    - [ ] trainers 테이블에 상세 정보 저장
-- [ ] 트레이너 상세/수정 페이지 (`app/(admin)/admin/trainers/[id]/page.tsx`)
-  - [ ] 트레이너 정보 조회 (Server Component)
-  - [ ] 수정 폼 (trainer-form.tsx 재사용)
-  - [ ] 비활성화(삭제) 기능
-  - [ ] 담당 회원 목록 표시
-- [ ] 트레이너별 스케줄 설정 (`app/(admin)/admin/trainers/[id]/schedule/page.tsx`)
-  - [ ] `components/forms/schedule-form.tsx`
-    - [ ] 요일별 근무시간 토글 (on/off)
-    - [ ] 요일별 시작/종료 시간 설정
-    - [ ] 슬롯 단위(분) 설정
-  - [ ] 휴무일 관리
-    - [ ] 캘린더에서 휴무일 선택/해제
-    - [ ] 사유 입력
-  - [ ] `actions/schedules.ts` Server Action
-    - [ ] trainer_schedules CRUD
-    - [ ] trainer_day_offs CRUD
+  - [x] `actions/trainers.ts` Server Action
+    - [x] Supabase Admin API로 auth 계정 생성
+    - [x] profiles 테이블에 role='trainer' 레코드 생성
+    - [x] trainers 테이블에 상세 정보 저장
+<!-- 세션 2-D: 트레이너 상세/수정 페이지 ✅ -->
+- [x] 트레이너 상세/수정 페이지 (`app/(admin)/admin/trainers/[id]/page.tsx`)
+  - [x] 트레이너 정보 조회 (Server Component)
+  - [x] 수정 폼 (trainer-form.tsx 재사용)
+  - [x] 비활성화(삭제) 기능
+  - [x] 담당 회원 목록 표시
+<!-- 세션 2-E: 트레이너 스케줄 설정 ✅ -->
+- [x] 트레이너별 스케줄 설정 (`app/(admin)/admin/trainers/[id]/schedule/page.tsx`)
+  - [x] `components/forms/schedule-form.tsx`
+    - [x] 요일별 근무시간 토글 (on/off)
+    - [x] 요일별 시작/종료 시간 설정
+    - [x] 슬롯 단위(분) 설정
+  - [x] 휴무일 관리
+    - [x] 캘린더에서 휴무일 선택/해제
+    - [x] 사유 입력
+  - [x] `actions/schedules.ts` Server Action
+    - [x] trainer_schedules CRUD
+    - [x] trainer_day_offs CRUD
 
 ---
 
