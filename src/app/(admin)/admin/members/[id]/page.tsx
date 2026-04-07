@@ -5,7 +5,9 @@ import { ChevronLeft, User, Phone, Calendar } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { Badge } from '@/components/ui/badge'
 import { MemberInfoForm } from './_components/member-info-form'
+import { PtPackageSection } from './_components/pt-package-section'
 import type { MemberWithProfile, TrainerWithProfile } from '@/lib/types'
+import type { PtPackageRow } from './_components/pt-package-section'
 
 interface Props {
   params: Promise<{ id: string }>
@@ -28,7 +30,7 @@ export default async function MemberDetailPage({ params }: Props) {
   const { id } = await params
   const supabase = await createClient()
 
-  const [memberRes, trainersRes] = await Promise.all([
+  const [memberRes, trainersRes, packagesRes] = await Promise.all([
     supabase
       .from('members')
       .select('*, profiles(*), trainers:assigned_trainer_id(*, profiles(*))')
@@ -39,6 +41,11 @@ export default async function MemberDetailPage({ params }: Props) {
       .select('*, profiles(*)')
       .eq('is_active', true)
       .order('created_at', { ascending: false }),
+    supabase
+      .from('pt_packages')
+      .select('*, trainers(*, profiles(*)), payments(payment_method)')
+      .eq('member_id', id)
+      .order('created_at', { ascending: false }),
   ])
 
   if (memberRes.error || !memberRes.data) {
@@ -47,6 +54,7 @@ export default async function MemberDetailPage({ params }: Props) {
 
   const member = memberRes.data as MemberWithProfile
   const trainers = (trainersRes.data ?? []) as TrainerWithProfile[]
+  const packages = (packagesRes.data ?? []) as PtPackageRow[]
 
   const trainerOptions = trainers.map((t) => ({
     id: t.id,
@@ -119,6 +127,13 @@ export default async function MemberDetailPage({ params }: Props) {
         memberId={member.id}
         memberType={member.member_type}
         assignedTrainerId={member.assigned_trainer_id}
+        trainers={trainerOptions}
+      />
+
+      {/* PT 패키지 */}
+      <PtPackageSection
+        memberId={member.id}
+        packages={packages}
         trainers={trainerOptions}
       />
     </div>

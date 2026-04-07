@@ -159,14 +159,14 @@
 - [x] 회원 상세 페이지 (`app/(admin)/admin/members/[id]/page.tsx`)
   - [x] 회원 기본정보 카드
   - [x] 회원 타입 변경 기능 (일반 ↔ PT)
-  <!-- 세션 3-C: PT 패키지 섹션 + actions/payments.ts -->
-  - [ ] PT 패키지 섹션
-    - [ ] 현재 활성 패키지 (잔여횟수, 만료일)
-    - [ ] PT 패키지 등록 폼 (admin이 결제 처리)
-      - [ ] 트레이너 선택
-      - [ ] 세션 수 / 가격 입력
-      - [ ] 결제 수단 선택 (카드/현금/계좌이체)
-    - [ ] 패키지 이력 목록
+  <!-- 세션 3-C: PT 패키지 섹션 + actions/payments.ts ✅ -->
+  - [x] PT 패키지 섹션
+    - [x] 현재 활성 패키지 (잔여횟수, 만료일)
+    - [x] PT 패키지 등록 폼 (admin이 결제 처리)
+      - [x] 트레이너 선택
+      - [x] 세션 수 / 가격 입력
+      - [x] 결제 수단 선택 (카드/현금/계좌이체)
+    - [x] 패키지 이력 목록
   <!-- 세션 3-D: 예약 이력 섹션 -->
   - [ ] 예약 이력 섹션
     - [ ] 타임라인 형태 예약 이력
@@ -174,8 +174,8 @@
   - [x] `actions/members.ts` Server Action
     - [x] 회원 타입 변경
     - [x] 담당 트레이너 배정
-  - [ ] `actions/payments.ts` Server Action
-    - [ ] PT 패키지 등록 + 결제 내역 생성
+  - [x] `actions/payments.ts` Server Action
+    - [x] PT 패키지 등록 + 결제 내역 생성
 
 ---
 
