@@ -155,10 +155,10 @@
   - [x] 검색 기능 (이름, 전화번호)
   - [x] 필터 (회원유형: 일반/PT, 상태: 활성/비활성)
   - [x] URL searchParams 기반 서버사이드 필터링
-<!-- 세션 3-B: 회원 상세 - 기본정보 + actions/members.ts -->
-- [ ] 회원 상세 페이지 (`app/(admin)/admin/members/[id]/page.tsx`)
-  - [ ] 회원 기본정보 카드
-  - [ ] 회원 타입 변경 기능 (일반 ↔ PT)
+<!-- 세션 3-B: 회원 상세 - 기본정보 + actions/members.ts ✅ -->
+- [x] 회원 상세 페이지 (`app/(admin)/admin/members/[id]/page.tsx`)
+  - [x] 회원 기본정보 카드
+  - [x] 회원 타입 변경 기능 (일반 ↔ PT)
   <!-- 세션 3-C: PT 패키지 섹션 + actions/payments.ts -->
   - [ ] PT 패키지 섹션
     - [ ] 현재 활성 패키지 (잔여횟수, 만료일)
@@ -171,9 +171,9 @@
   - [ ] 예약 이력 섹션
     - [ ] 타임라인 형태 예약 이력
     - [ ] 다음 예약 일정 D-day 표시
-  - [ ] `actions/members.ts` Server Action
-    - [ ] 회원 타입 변경
-    - [ ] 담당 트레이너 배정
+  - [x] `actions/members.ts` Server Action
+    - [x] 회원 타입 변경
+    - [x] 담당 트레이너 배정
   - [ ] `actions/payments.ts` Server Action
     - [ ] PT 패키지 등록 + 결제 내역 생성
 
