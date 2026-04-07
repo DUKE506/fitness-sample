@@ -6,6 +6,7 @@ import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterv
 import { ko } from 'date-fns/locale'
 import { cn } from '@/lib/utils/cn'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
 import { Dialog, DialogFooter } from '@/components/ui/dialog'
 import { upsertTrainerSchedules, upsertDayOff, deleteDayOff } from '@/actions/schedules'
 import type { TrainerSchedule, TrainerDayOff } from '@/lib/types'
@@ -128,20 +129,12 @@ function WorkHoursSection({
               />
 
               {/* 슬롯 단위 */}
-              <select
-                value={day.slot_duration_minutes}
-                onChange={(e) =>
-                  update(dow, 'slot_duration_minutes', Number(e.target.value))
-                }
+              <Select
+                value={String(day.slot_duration_minutes)}
+                onChange={(v) => update(dow, 'slot_duration_minutes', Number(v))}
                 disabled={!day.is_active}
-                className="bg-white/6 border border-white/12 rounded-lg px-3 py-1.5 text-sm text-white disabled:opacity-40 focus:outline-none focus:border-emerald-500/50 cursor-pointer"
-              >
-                {SLOT_OPTIONS.map((m) => (
-                  <option key={m} value={m} className="bg-neutral-900">
-                    {m}분 단위
-                  </option>
-                ))}
-              </select>
+                options={SLOT_OPTIONS.map((m) => ({ value: String(m), label: `${m}분 단위` }))}
+              />
             </div>
           </div>
         ))}
