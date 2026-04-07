@@ -196,12 +196,12 @@
     - [x] 전문분야 배지
   - [x] 카드 그리드 레이아웃 (모바일 1열, 태블릿+ 2열)
   - [x] 전문분야별 필터
-<!-- 세션 4-B: 트레이너 상세 페이지 -->
-- [ ] 트레이너 상세 페이지 (`app/(user)/trainers/[id]/page.tsx`)
-  - [ ] 프로필 사진 + 소개글
-  - [ ] 전문분야, 자격증, 경력 상세
-  - [ ] 이번 주 가능 시간대 미리보기 (`get_available_slots` 활용)
-  - [ ] "PT 신청하기" CTA 버튼 → `/apply?trainer=[id]`
+<!-- 세션 4-B: 트레이너 상세 페이지 ✅ -->
+- [x] 트레이너 상세 페이지 (`app/(user)/trainers/[id]/page.tsx`)
+  - [x] 프로필 사진 + 소개글
+  - [x] 전문분야, 자격증, 경력 상세
+  - [x] 이번 주 가능 시간대 미리보기 (`get_available_slots` 활용)
+  - [x] "PT 신청하기" CTA 버튼 → `/apply?trainer=[id]`
 <!-- 세션 4-C: PT 신청 Step 1~2 (트레이너 선택 + 날짜/시간) -->
 - [ ] PT 신청 - Step 1: 트레이너 선택 (`app/(user)/apply/page.tsx`)
   - [ ] `stores/use-reservation-store.ts` 상태 확인/보완
