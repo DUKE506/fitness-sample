@@ -181,37 +181,44 @@
 
 ## Phase 4: 사용자 - 트레이너 정보 + PT 신청
 
+<!-- 세션 4-A: 사용자 레이아웃 + 트레이너 목록 -->
 - [ ] 사용자 레이아웃 컴포넌트
   - [ ] `components/layout/user-tab-bar.tsx` (하단 탭바)
     - [ ] 탭: 트레이너, 내스케줄, PT신청, 프로필
     - [ ] 아이콘 + 라벨
     - [ ] 현재 경로 활성 상태
+  - [ ] `app/(user)/layout.tsx` 탭바 연결
 - [ ] 트레이너 목록 페이지 (`app/(user)/trainers/page.tsx`)
+  - [ ] `components/trainer/specialty-badge.tsx` 전문분야 배지
   - [ ] `components/trainer/trainer-card.tsx` 카드 컴포넌트
     - [ ] 프로필 사진
     - [ ] 이름, 경력
-    - [ ] `components/trainer/specialty-badge.tsx` 전문분야 배지
+    - [ ] 전문분야 배지
   - [ ] 카드 그리드 레이아웃 (모바일 1열, 태블릿+ 2열)
   - [ ] 전문분야별 필터
+<!-- 세션 4-B: 트레이너 상세 페이지 -->
 - [ ] 트레이너 상세 페이지 (`app/(user)/trainers/[id]/page.tsx`)
   - [ ] 프로필 사진 + 소개글
   - [ ] 전문분야, 자격증, 경력 상세
-  - [ ] 이번 주 가능 시간대 미리보기
+  - [ ] 이번 주 가능 시간대 미리보기 (`get_available_slots` 활용)
   - [ ] "PT 신청하기" CTA 버튼 → `/apply?trainer=[id]`
+<!-- 세션 4-C: PT 신청 Step 1~2 (트레이너 선택 + 날짜/시간) -->
 - [ ] PT 신청 - Step 1: 트레이너 선택 (`app/(user)/apply/page.tsx`)
+  - [ ] `stores/use-reservation-store.ts` 상태 확인/보완
   - [ ] 트레이너 카드 목록 (간략 버전)
   - [ ] 선택 시 Zustand store에 저장 + `/apply/time` 이동
 - [ ] PT 신청 - Step 2: 날짜/시간 선택 (`app/(user)/apply/time/page.tsx`)
+  - [ ] `hooks/use-available-slots.ts` 가용 슬롯 조회 훅
   - [ ] `components/schedule/calendar-view.tsx` 날짜 선택 캘린더
   - [ ] `components/schedule/time-slot-picker.tsx` 시간 슬롯 선택
     - [ ] `get_available_slots` RPC 호출
     - [ ] 가용/불가 슬롯 시각적 구분
     - [ ] 선택 상태 관리
-  - [ ] `hooks/use-available-slots.ts` 가용 슬롯 조회 훅
+<!-- 세션 4-D: PT 신청 Step 3 + actions/reservations.ts -->
 - [ ] PT 신청 - Step 3: 완료 (`app/(user)/apply/complete/page.tsx`)
+  - [ ] `actions/reservations.ts` Server Action (`create_reservation_with_session_decrement` RPC 호출)
   - [ ] 선택 내역 요약 (트레이너, 날짜, 시간)
   - [ ] "신청하기" 버튼
-  - [ ] `actions/reservations.ts` Server Action 호출 (status='pending')
   - [ ] 성공 화면 + 내 스케줄 이동 버튼
   - [ ] 실패 시 에러 안내
 
