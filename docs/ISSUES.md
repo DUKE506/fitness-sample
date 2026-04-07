@@ -2,6 +2,139 @@
 
 ---
 
+## [OPEN] 개발용 회원가입 — naver.com 등 일부 이메일 도메인 차단
+
+**발생 일자**: 2026-04-07
+
+**재현 경로**: 로그인 페이지 > 임시 회원가입 폼 > `member1@naver.com` 입력 → 제출
+
+**증상**:
+
+- `signUpForDev` Server Action 실행 시 Supabase에서 에러 반환
+- `supabase.auth.signUp()` (일반 클라이언트) 및 `admin.auth.admin.createUser()` (Admin 클라이언트) 모두 동일 에러
+- 로그: `GET /login?error=Email+address+%22member1%40naver.com%22+is+invalid`
+
+**원인**: Supabase 프로젝트 Auth 설정에서 이메일 도메인 제한 또는 이메일 검증 서비스가 특정 도메인을 차단. Admin API도 우회 불가.
+
+**해결 방법**: Supabase Dashboard > Authentication > Settings > "Email provider" 항목에서 도메인 제한 설정 확인 및 해제. 또는 개발 시 `@test.com`, `@example.com` 등 허용 도메인 사용.
+
+---
+
+## [RESOLVED] 개발용 회원가입 — redirect 한국어 메시지로 인한 500 에러
+
+**발생 일자**: 2026-04-07
+**해결 일자**: 2026-04-07
+
+**재현 경로**: `signUpForDev` 성공 시 `redirect("/login?message=가입이 완료되었습니다. 로그인해주세요.")` 호출
+
+**증상**:
+
+- `POST /login 500`
+- `TypeError: Invalid character in header content ["x-action-redirect"]`
+- `code: 'ERR_INVALID_CHAR'`
+
+**원인**: Next.js 16 `redirect()`는 redirect 경로를 HTTP 헤더(`x-action-redirect`)로 전달하는데, 비ASCII(한국어) 문자가 포함된 URL을 그대로 헤더에 넣으면 Node.js가 `ERR_INVALID_CHAR`로 거부함.
+
+**해결**: `encodeURIComponent()`로 인코딩. `src/actions/auth.ts` 수정.
+
+```ts
+// 변경 전
+redirect("/login?message=가입이 완료되었습니다. 로그인해주세요.");
+
+// 변경 후
+redirect("/login?message=" + encodeURIComponent("가입이 완료되었습니다. 로그인해주세요."));
+```
+
+---
+
+## [RESOLVED] 로그인 후 /trainers 대신 /login으로 redirect되는 문제
+
+**발생 일자**: 2026-04-07
+**해결 일자**: 2026-04-07
+
+**재현 경로**: member 계정으로 로그인 → `signInWithPassword` → `redirect('/trainers')` 호출 → 브라우저가 `/login`에 도달
+
+**증상**:
+
+```
+failed to get redirect response TypeError: fetch failed
+  [cause]: Error: redirect count exceeded
+POST /login 303 in 3.0s
+GET /login 200
+```
+
+**원인**: `proxy.ts`의 trainer 경로 guard에서 `pathname.startsWith('/trainer')`가 `/trainers`도 매칭함. member가 `/trainers`에 접근하면 proxy가 role 체크 후 `/trainers`로 재redirect → 무한 루프 발생.
+
+```ts
+// 문제가 된 코드
+if (pathname.startsWith('/trainer')) { ... }
+// /trainers.startsWith('/trainer') === true → member도 걸림
+```
+
+**해결**: `src/proxy.ts`에서 `/trainer` 경로 매칭을 정확한 조건으로 수정.
+
+```ts
+// 변경 전
+if (pathname.startsWith('/trainer')) {
+
+// 변경 후
+if (pathname === '/trainer' || pathname.startsWith('/trainer/')) {
+```
+
+---
+
+## [RESOLVED] TrainerCard — profiles null로 인한 런타임 에러
+
+**발생 일자**: 2026-04-07
+**해결 일자**: 2026-04-07
+
+**재현 경로**: member 로그인 → `/trainers` 페이지 진입 → TrainerCard 렌더링
+
+**증상**:
+
+```
+Uncaught TypeError: Cannot read properties of null (reading 'name')
+at TrainerCard (src/components/trainer/trainer-card.tsx:41:29)
+```
+
+**원인**: Supabase에서 `trainers`와 `profiles`를 조인 조회할 때 `profile_id`에 연결된 profiles row가 없거나 RLS로 인해 조회가 막히면 `profiles`가 `null`로 반환됨. 컴포넌트에서 null 가드 없이 `profiles.name`에 접근해서 에러 발생.
+
+**해결**: `src/components/trainer/trainer-card.tsx`에 null 가드 추가.
+
+```ts
+if (!profiles) return null
+```
+
+---
+
+## [RESOLVED] 개발용 회원가입 — signUpForDev에서 Admin API 미사용으로 도메인 차단
+
+**발생 일자**: 2026-04-07
+**해결 일자**: 2026-04-07
+
+**재현 경로**: 임시 회원가입 폼 제출 → `supabase.auth.signUp()` 호출
+
+**증상**: `test.com` 등 일부 도메인에서 이메일 검증 에러 발생. 이메일 인증 메일 발송으로 즉시 로그인 불가.
+
+**원인**: `signUpForDev`가 일반 클라이언트의 `auth.signUp()`을 사용 → Supabase 이메일 검증 정책 적용, 이메일 인증 대기 상태로 생성.
+
+**해결**: `admin.auth.admin.createUser()`로 교체 + `email_confirm: true` 설정. `src/actions/auth.ts` 수정.
+
+```ts
+// 변경 전
+await supabase.auth.signUp({ email, password, options: { data: { name } } })
+
+// 변경 후
+await admin.auth.admin.createUser({
+  email,
+  password,
+  email_confirm: true,
+  user_metadata: { name },
+})
+```
+
+---
+
 ## [RESOLVED] Server Action 내 profiles 쿼리 null 반환
 
 **발생 일자**: 2026-04-06 16:58

@@ -41,23 +41,23 @@ export async function signOut() {
 }
 
 export async function signUpForDev(formData: FormData) {
-  const supabase = await createClient();
-
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const name = formData.get("name") as string;
 
-  const { error } = await supabase.auth.signUp({
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const admin = createAdminClient();
+
+  const { error } = await admin.auth.admin.createUser({
     email,
     password,
-    options: {
-      data: { name },
-    },
+    email_confirm: true,
+    user_metadata: { name },
   });
 
   if (error) {
     redirect("/login?error=" + encodeURIComponent(error.message));
   }
 
-  redirect("/login?message=가입이 완료되었습니다. 로그인해주세요.");
+  redirect("/login?message=" + encodeURIComponent("가입이 완료되었습니다. 로그인해주세요."));
 }

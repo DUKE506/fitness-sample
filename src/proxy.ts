@@ -54,8 +54,8 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // trainer 경로 접근 시 role 체크
-  if (pathname.startsWith('/trainer')) {
+  // trainer 경로 접근 시 role 체크 (/trainers 제외)
+  if (pathname === '/trainer' || pathname.startsWith('/trainer/')) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')

@@ -181,21 +181,21 @@
 
 ## Phase 4: 사용자 - 트레이너 정보 + PT 신청
 
-<!-- 세션 4-A: 사용자 레이아웃 + 트레이너 목록 -->
-- [ ] 사용자 레이아웃 컴포넌트
-  - [ ] `components/layout/user-tab-bar.tsx` (하단 탭바)
-    - [ ] 탭: 트레이너, 내스케줄, PT신청, 프로필
-    - [ ] 아이콘 + 라벨
-    - [ ] 현재 경로 활성 상태
-  - [ ] `app/(user)/layout.tsx` 탭바 연결
-- [ ] 트레이너 목록 페이지 (`app/(user)/trainers/page.tsx`)
-  - [ ] `components/trainer/specialty-badge.tsx` 전문분야 배지
-  - [ ] `components/trainer/trainer-card.tsx` 카드 컴포넌트
-    - [ ] 프로필 사진
-    - [ ] 이름, 경력
-    - [ ] 전문분야 배지
-  - [ ] 카드 그리드 레이아웃 (모바일 1열, 태블릿+ 2열)
-  - [ ] 전문분야별 필터
+<!-- 세션 4-A: 사용자 레이아웃 + 트레이너 목록 ✅ -->
+- [x] 사용자 레이아웃 컴포넌트
+  - [x] `components/layout/user-tab-bar.tsx` (하단 탭바, floating 스타일)
+    - [x] 탭: 트레이너, 내스케줄, PT신청, 프로필
+    - [x] 아이콘 + 라벨
+    - [x] 현재 경로 활성 상태
+  - [x] `app/(user)/layout.tsx` 탭바 연결
+- [x] 트레이너 목록 페이지 (`app/(user)/trainers/page.tsx`)
+  - [x] `components/trainer/specialty-badge.tsx` 전문분야 배지
+  - [x] `components/trainer/trainer-card.tsx` 카드 컴포넌트
+    - [x] 프로필 사진
+    - [x] 이름, 경력
+    - [x] 전문분야 배지
+  - [x] 카드 그리드 레이아웃 (모바일 1열, 태블릿+ 2열)
+  - [x] 전문분야별 필터
 <!-- 세션 4-B: 트레이너 상세 페이지 -->
 - [ ] 트레이너 상세 페이지 (`app/(user)/trainers/[id]/page.tsx`)
   - [ ] 프로필 사진 + 소개글
