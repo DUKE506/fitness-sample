@@ -264,6 +264,54 @@
 
 ---
 
+## Phase 5.5: 플로우 개편 + 트레이너 전용 화면
+
+> 기존 회원 주도 PT 신청 플로우를 트레이너 주도로 전환하고, 트레이너 전용 화면을 신규 구현
+
+<!-- 세션 5.5-A: 기존 코드 제거 + 액션 개편 -->
+- [ ] 기존 회원 주도 플로우 제거
+  - [ ] `app/(user)/apply/` 디렉토리 전체 삭제
+  - [ ] 회원 탭바에서 "PT신청" 탭 제거 (`components/layout/user-tab-bar.tsx`)
+  - [ ] `actions/reservations.ts`에서 `approveReservation`, `rejectReservation` 제거
+  - [ ] 회원 `/my-schedule`에서 예약 취소/변경 버튼 제거
+  - [ ] `cancelReservation` 액션 — 트레이너/관리자만 호출 가능하도록 role 체크 추가
+- [ ] 예약 생성 액션 개편
+  - [ ] `createReservation` — 세션 차감 없는 단순 생성으로 교체 (`create_reservation_with_session_decrement` → 직접 INSERT)
+  - [ ] `completeReservation` 신규 액션 — status → `completed` + `remaining_sessions` 1 차감
+
+<!-- 세션 5.5-B: 트레이너 레이아웃 + 스케줄 화면 -->
+- [ ] 트레이너 레이아웃
+  - [ ] `app/(trainer)/layout.tsx` 트레이너 전용 라우트 그룹
+  - [ ] `components/layout/trainer-tab-bar.tsx` 하단 탭바 (스케줄, 회원, 프로필)
+  - [ ] proxy.ts — `/trainer` 경로 role 체크 확인 (이미 구현, 진입점 연결만)
+- [ ] 트레이너 스케줄 메인 (`app/(trainer)/trainer/schedule/page.tsx`)
+  - [ ] 월/주/일 뷰 탭 (관리자 전체 스케줄 컴포넌트 재사용)
+  - [ ] 본인 예약만 필터링
+  - [ ] 담당 회원 배정(생성) 버튼 → 날짜/시간 + 담당 회원 선택 모달
+  - [ ] `createReservation` 액션 연결
+
+<!-- 세션 5.5-C: 오늘 PT 목록 + 완료 처리 -->
+- [ ] 오늘 PT 목록 (`app/(trainer)/trainer/schedule/_components/today-sessions.tsx`)
+  - [ ] 당일 예약 리스트
+  - [ ] 완료 처리 버튼 → `completeReservation` 액션 연결 → 세션 차감
+  - [ ] 완료 확인 모달
+
+<!-- 세션 5.5-D: 담당 회원 목록 + 상세 -->
+- [ ] 담당 회원 목록 (`app/(trainer)/trainer/members/page.tsx`)
+  - [ ] 본인 담당 회원 리스트
+  - [ ] 회원 이름, 잔여 세션, 다음 예약일 표시
+- [ ] 담당 회원 상세 (`app/(trainer)/trainer/members/[id]/page.tsx`)
+  - [ ] 기본 정보 (이름, 연락처)
+  - [ ] PT 패키지 현황 (전체 세션, 잔여, 사용 횟수)
+  - [ ] 예약 이력
+
+<!-- 세션 5.5-E: 트레이너 프로필 수정 -->
+- [ ] 트레이너 프로필 수정 (`app/(trainer)/trainer/profile/page.tsx`)
+  - [ ] 소개글, 전문분야, 자격증, 경력 수정
+  - [ ] `actions/trainers.ts` 수정 액션 재사용
+
+---
+
 ## Phase 6: 매출 관리
 
 - [ ] 매출 관리 페이지 (`app/(admin)/admin/revenue/page.tsx`)
