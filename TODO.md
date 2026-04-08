@@ -236,15 +236,15 @@
   - [x] 예약 승인 액션 (status → 'confirmed')
   - [x] 예약 거부 액션 (status → 'rejected')
   - [x] 예약 취소 액션 (`cancel_reservation_with_session_restore` RPC 호출)
-<!-- 세션 5-B: 관리자 전체 스케줄 페이지 -->
-- [ ] 관리자 전체 스케줄 페이지 (`app/(admin)/admin/schedule/page.tsx`)
-  - [ ] 일간 뷰: 시간대(세로) x 트레이너(가로) 그리드
-  - [ ] 주간 뷰: 날짜(가로) x 시간대(세로), 트레이너 필터
-  - [ ] 월간 뷰: 달력 형태, 날짜별 예약 건수
-  - [ ] Tabs 컴포넌트로 일/주/월 전환
-  - [ ] 트레이너 드롭다운 필터
-  - [ ] Supabase Realtime 실시간 업데이트
-    - [ ] `hooks/use-realtime-reservations.ts`
+<!-- 세션 5-B: 관리자 전체 스케줄 페이지 ✅ -->
+- [x] 관리자 전체 스케줄 페이지 (`app/(admin)/admin/schedule/page.tsx`)
+  - [x] 일간 뷰: 시간대(세로) x 트레이너(가로) 그리드
+  - [x] 주간 뷰: 날짜(가로) x 시간대(세로), 트레이너 필터
+  - [x] 월간 뷰: 달력 형태, 날짜별 예약 건수
+  - [x] 일/주/월 탭 전환
+  - [x] 트레이너 버튼 필터 (주간 뷰)
+  - [x] Supabase Realtime 실시간 업데이트
+    - [x] `hooks/use-realtime-reservations.ts`
 <!-- 세션 5-C: 트레이너 스케줄 + 예약 요청 페이지 -->
 - [ ] 트레이너 전용 스케줄 + 예약 요청 페이지 (`app/(admin)/admin/trainers/[id]/reservations/page.tsx`)
   - [ ] 본인 스케줄 (일/주 뷰, reservation-card 재사용)
