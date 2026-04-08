@@ -2,6 +2,40 @@
 
 ---
 
+## [RESOLVED] 예약 취소 — RLS 미설정으로 회원의 cancelReservation 무응답
+
+**발생 일자**: 2026-04-08
+**해결 일자**: 2026-04-08
+
+**재현 경로**: 내 스케줄(`/my-schedule`) → 예약 변경 → 확인 → `/apply` 이동 후 DB 확인
+
+**증상**:
+
+- `cancelReservation` Server Action이 `success: true`를 반환하고 `/apply`로 이동하지만, DB의 예약 `status`가 `confirmed` 그대로 유지됨
+- 세션 복구도 일어나지 않음
+- `/my-schedule` 복귀 시 예약이 여전히 예정된 예약 목록에 표시됨
+
+**원인**: `reservations` 테이블 RLS 정책에 회원의 UPDATE 권한이 없었음.
+
+- `cancel_reservation_with_session_restore` RPC 내부에서 `UPDATE reservations SET status = 'cancelled'` 실행 시 RLS에 막혀 0 rows affected
+- RPC가 `returns void`라 에러 없이 정상 종료 → 액션에서 `success: true` 반환
+- 기존 UPDATE 정책: 트레이너(`"Trainers can approve/reject reservations"`)와 어드민만 존재
+
+**해결**: Supabase Dashboard에서 회원 전용 UPDATE 정책 추가.
+
+```sql
+create policy "Members cancel own reservations"
+  on public.reservations for update
+  using (
+    member_id in (select id from public.members where profile_id = auth.uid())
+  )
+  with check (
+    member_id in (select id from public.members where profile_id = auth.uid())
+  );
+```
+
+---
+
 ## [RESOLVED] PT 신청 멀티스텝 — "트레이너 변경" 클릭 시 현재 페이지로 redirect 루프
 
 **발생 일자**: 2026-04-08
