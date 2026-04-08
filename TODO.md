@@ -202,59 +202,65 @@
   - [x] 전문분야, 자격증, 경력 상세
   - [x] 이번 주 가능 시간대 미리보기 (`get_available_slots` 활용)
   - [x] "PT 신청하기" CTA 버튼 → `/apply?trainer=[id]`
-<!-- 세션 4-C: PT 신청 Step 1~2 (트레이너 선택 + 날짜/시간) -->
-- [ ] PT 신청 - Step 1: 트레이너 선택 (`app/(user)/apply/page.tsx`)
-  - [ ] `stores/use-reservation-store.ts` 상태 확인/보완
-  - [ ] 트레이너 카드 목록 (간략 버전)
-  - [ ] 선택 시 Zustand store에 저장 + `/apply/time` 이동
-- [ ] PT 신청 - Step 2: 날짜/시간 선택 (`app/(user)/apply/time/page.tsx`)
-  - [ ] `hooks/use-available-slots.ts` 가용 슬롯 조회 훅
-  - [ ] `components/schedule/calendar-view.tsx` 날짜 선택 캘린더
-  - [ ] `components/schedule/time-slot-picker.tsx` 시간 슬롯 선택
-    - [ ] `get_available_slots` RPC 호출
-    - [ ] 가용/불가 슬롯 시각적 구분
-    - [ ] 선택 상태 관리
-<!-- 세션 4-D: PT 신청 Step 3 + actions/reservations.ts -->
-- [ ] PT 신청 - Step 3: 완료 (`app/(user)/apply/complete/page.tsx`)
-  - [ ] `actions/reservations.ts` Server Action (`create_reservation_with_session_decrement` RPC 호출)
-  - [ ] 선택 내역 요약 (트레이너, 날짜, 시간)
-  - [ ] "신청하기" 버튼
-  - [ ] 성공 화면 + 내 스케줄 이동 버튼
-  - [ ] 실패 시 에러 안내
+<!-- 세션 4-C: PT 신청 Step 1~2 (트레이너 선택 + 날짜/시간) ✅ -->
+- [x] PT 신청 - Step 1: 트레이너 선택 (`app/(user)/apply/page.tsx`)
+  - [x] `stores/use-reservation-store.ts` 상태 확인/보완
+  - [x] 트레이너 카드 목록 (간략 버전)
+  - [x] 선택 시 Zustand store에 저장 + `/apply/time` 이동
+- [x] PT 신청 - Step 2: 날짜/시간 선택 (`app/(user)/apply/time/page.tsx`)
+  - [x] `hooks/use-available-slots.ts` 가용 슬롯 조회 훅
+  - [x] `components/schedule/calendar-view.tsx` 날짜 선택 캘린더
+  - [x] `components/schedule/time-slot-picker.tsx` 시간 슬롯 선택
+    - [x] `get_available_slots` RPC 호출
+    - [x] 가용/불가 슬롯 시각적 구분
+    - [x] 선택 상태 관리
+<!-- 세션 4-D: PT 신청 Step 3 + actions/reservations.ts ✅ -->
+- [x] PT 신청 - Step 3: 완료 (`app/(user)/apply/complete/page.tsx`)
+  - [x] `actions/reservations.ts` Server Action (`create_reservation_with_session_decrement` RPC 호출)
+  - [x] 선택 내역 요약 (트레이너, 날짜, 시간)
+  - [x] "신청하기" 버튼
+  - [x] 성공 화면 + 내 스케줄 이동 버튼
+  - [x] 실패 시 에러 안내
 
 ---
 
 ## Phase 5: 스케줄 관리
 
-- [ ] 관리자 전체 스케줄 페이지 (`app/(admin)/admin/schedule/page.tsx`)
-  - [ ] `components/schedule/calendar-view.tsx` 확장
-    - [ ] 일간 뷰: 시간대(세로) x 트레이너(가로) 그리드
-    - [ ] 주간 뷰: 날짜(가로) x 시간대(세로), 트레이너 필터
-    - [ ] 월간 뷰: 달력 형태, 날짜별 예약 건수
+<!-- 세션 5-A: 공유 컴포넌트 + Server Actions 보완 -->
+- [ ] 공유 컴포넌트
   - [ ] `components/schedule/reservation-card.tsx` 예약 블록
     - [ ] 회원명, 시간, 상태 배지
     - [ ] 클릭 시 상세 모달
+  - [ ] `components/schedule/d-day-badge.tsx` 다음 세션 D-day
+- [ ] `actions/reservations.ts` 보완
+  - [ ] 예약 승인 액션 (status → 'confirmed')
+  - [ ] 예약 거부 액션 (status → 'rejected')
+  - [ ] 예약 취소 액션 (`cancel_reservation_with_session_restore` RPC 호출)
+<!-- 세션 5-B: 관리자 전체 스케줄 페이지 -->
+- [ ] 관리자 전체 스케줄 페이지 (`app/(admin)/admin/schedule/page.tsx`)
+  - [ ] 일간 뷰: 시간대(세로) x 트레이너(가로) 그리드
+  - [ ] 주간 뷰: 날짜(가로) x 시간대(세로), 트레이너 필터
+  - [ ] 월간 뷰: 달력 형태, 날짜별 예약 건수
   - [ ] Tabs 컴포넌트로 일/주/월 전환
   - [ ] 트레이너 드롭다운 필터
   - [ ] Supabase Realtime 실시간 업데이트
     - [ ] `hooks/use-realtime-reservations.ts`
-- [ ] 트레이너 전용 스케줄 + 예약 요청 페이지
-  - [ ] 본인 스케줄 (일/주 뷰)
-  - [ ] PT예약 요청 목록
+<!-- 세션 5-C: 트레이너 스케줄 + 예약 요청 페이지 -->
+- [ ] 트레이너 전용 스케줄 + 예약 요청 페이지 (`app/(admin)/admin/trainers/[id]/reservations/page.tsx`)
+  - [ ] 본인 스케줄 (일/주 뷰, reservation-card 재사용)
+  - [ ] PT 예약 요청 목록
     - [ ] pending 상태 예약 리스트
-    - [ ] 승인/거부 버튼
-    - [ ] `actions/reservations.ts`에 승인/거부 액션 추가
+    - [ ] 승인/거부 버튼 (5-A 액션 연결)
+<!-- 세션 5-D: 사용자 내 스케줄 페이지 -->
 - [ ] 사용자 내 스케줄 페이지 (`app/(user)/my-schedule/page.tsx`)
-  - [ ] `components/schedule/d-day-badge.tsx` 다음 세션 D-day
   - [ ] 잔여 세션 프로그레스 바
-  - [ ] 예약 리스트 (가까운 순서)
-    - [ ] `components/schedule/reservation-card.tsx` 재사용
+  - [ ] 예약 리스트 (가까운 순서, reservation-card 재사용)
     - [ ] 상태 배지 (pending/confirmed/rejected)
   - [ ] 예약 취소 기능
     - [ ] 취소 확인 모달
-    - [ ] `actions/reservations.ts` 취소 액션 (세션 복구 포함)
+    - [ ] 5-A 취소 액션 연결 (세션 복구 포함)
   - [ ] 예약 변경 기능
-    - [ ] 기존 예약 취소 + 새 예약 생성 플로우
+    - [ ] 기존 예약 취소 + 새 예약 생성 플로우 (/apply로 이동)
 
 ---
 

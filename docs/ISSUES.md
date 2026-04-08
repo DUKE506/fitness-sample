@@ -2,6 +2,52 @@
 
 ---
 
+## [RESOLVED] PT 신청 멀티스텝 — "트레이너 변경" 클릭 시 현재 페이지로 redirect 루프
+
+**발생 일자**: 2026-04-08
+**해결 일자**: 2026-04-08
+
+**재현 경로**: 트레이너 상세(`/trainers/[id]`) → "PT 신청하기" → `/apply?trainer=[id]` → (자동 redirect) `/apply/time` → "트레이너 변경" 클릭
+
+**증상**:
+
+- "트레이너 변경" 클릭 시 `/apply` 트레이너 선택 화면으로 이동해야 하는데, 현재 페이지(`/apply/time`)로 재redirect됨
+- 하단 플로팅 탭바에서 `/apply` 직접 진입 후 트레이너 선택 → `/apply/time` 경로에서는 정상 동작
+
+**원인**: 히스토리 스택과 redirect 방식의 조합 문제
+
+1. `trainer-select-list.tsx`가 `preselectedId` 감지 시 `router.push('/apply/time')`를 사용 → 히스토리에 `/apply?trainer=[id]`가 남음
+2. `/apply/time`에서 "트레이너 변경"이 `router.back()` 사용 → `/apply?trainer=[id]`로 복귀
+3. `/apply?trainer=[id]`에서 다시 `preselectedId` 감지 → `/apply/time`으로 redirect → 무한 루프
+
+```
+히스토리: /trainers/[id] → /apply?trainer=[id] → /apply/time
+back() → /apply?trainer=[id] → (preselect 재발동) → /apply/time → 루프
+```
+
+**해결**:
+
+1. `trainer-select-list.tsx`: preselect redirect를 `router.push` → `router.replace`로 변경 → `/apply?trainer=[id]`가 히스토리에서 제거됨
+2. `apply/time/page.tsx`: `router.back()` → `router.push('/apply')`로 변경 → 어느 경로로 진입하든 명시적으로 트레이너 선택 페이지로 이동
+
+```ts
+// trainer-select-list.tsx
+// 변경 전
+router.push('/apply/time')
+// 변경 후
+router.replace('/apply/time')
+
+// apply/time/page.tsx
+// 변경 전
+router.back()
+// 변경 후
+router.push('/apply')
+```
+
+**교훈**: 멀티스텝 플로우에서 특정 URL이 자동 redirect를 포함할 경우, `router.push` 대신 `router.replace`를 사용해 히스토리에서 제거해야 함. 또한 "뒤로가기" 버튼은 `router.back()` 대신 명시적 경로로 이동하는 것이 안전함.
+
+---
+
 ## [OPEN] 개발용 회원가입 — naver.com 등 일부 이메일 도메인 차단
 
 **발생 일자**: 2026-04-07
