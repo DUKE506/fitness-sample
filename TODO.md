@@ -226,16 +226,16 @@
 
 ## Phase 5: 스케줄 관리
 
-<!-- 세션 5-A: 공유 컴포넌트 + Server Actions 보완 -->
-- [ ] 공유 컴포넌트
-  - [ ] `components/schedule/reservation-card.tsx` 예약 블록
-    - [ ] 회원명, 시간, 상태 배지
-    - [ ] 클릭 시 상세 모달
-  - [ ] `components/schedule/d-day-badge.tsx` 다음 세션 D-day
-- [ ] `actions/reservations.ts` 보완
-  - [ ] 예약 승인 액션 (status → 'confirmed')
-  - [ ] 예약 거부 액션 (status → 'rejected')
-  - [ ] 예약 취소 액션 (`cancel_reservation_with_session_restore` RPC 호출)
+<!-- 세션 5-A: 공유 컴포넌트 + Server Actions 보완 ✅ -->
+- [x] 공유 컴포넌트
+  - [x] `components/schedule/reservation-card.tsx` 예약 블록
+    - [x] 회원명, 시간, 상태 배지
+    - [x] 클릭 시 상세 모달
+  - [x] `components/schedule/d-day-badge.tsx` 다음 세션 D-day
+- [x] `actions/reservations.ts` 보완
+  - [x] 예약 승인 액션 (status → 'confirmed')
+  - [x] 예약 거부 액션 (status → 'rejected')
+  - [x] 예약 취소 액션 (`cancel_reservation_with_session_restore` RPC 호출)
 <!-- 세션 5-B: 관리자 전체 스케줄 페이지 -->
 - [ ] 관리자 전체 스케줄 페이지 (`app/(admin)/admin/schedule/page.tsx`)
   - [ ] 일간 뷰: 시간대(세로) x 트레이너(가로) 그리드

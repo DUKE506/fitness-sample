@@ -7,6 +7,10 @@ type ActionResult =
   | { success: true; reservationId: string }
   | { success: false; error: string }
 
+type SimpleResult =
+  | { success: true }
+  | { success: false; error: string }
+
 export async function createReservation(
   trainerId: string,
   date: string,       // "YYYY-MM-DD"
@@ -73,4 +77,52 @@ export async function createReservation(
 
   revalidatePath('/my-schedule')
   return { success: true, reservationId: reservationId as string }
+}
+
+export async function approveReservation(reservationId: string): Promise<SimpleResult> {
+  const supabase = await createClient()
+
+  const { error } = await supabase
+    .from('reservations')
+    .update({ status: 'confirmed', updated_at: new Date().toISOString() })
+    .eq('id', reservationId)
+
+  if (error) return { success: false, error: error.message }
+
+  revalidatePath('/my-schedule')
+  revalidatePath('/admin/schedule')
+  return { success: true }
+}
+
+export async function rejectReservation(reservationId: string): Promise<SimpleResult> {
+  const supabase = await createClient()
+
+  const { error } = await supabase
+    .from('reservations')
+    .update({ status: 'rejected', updated_at: new Date().toISOString() })
+    .eq('id', reservationId)
+
+  if (error) return { success: false, error: error.message }
+
+  revalidatePath('/my-schedule')
+  revalidatePath('/admin/schedule')
+  return { success: true }
+}
+
+export async function cancelReservation(reservationId: string): Promise<SimpleResult> {
+  const supabase = await createClient()
+
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  if (authError || !user) return { success: false, error: '로그인이 필요합니다.' }
+
+  const { error } = await supabase.rpc('cancel_reservation_with_session_restore', {
+    p_reservation_id: reservationId,
+    p_cancel_reason: undefined,
+  })
+
+  if (error) return { success: false, error: error.message }
+
+  revalidatePath('/my-schedule')
+  revalidatePath('/admin/schedule')
+  return { success: true }
 }
