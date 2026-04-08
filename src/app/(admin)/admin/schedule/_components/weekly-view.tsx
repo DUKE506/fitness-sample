@@ -21,6 +21,8 @@ interface WeeklyViewProps {
   onSelectTrainer: (id: string) => void
   selectedDate: Date
   onStatusChange: () => void
+  viewAs?: 'admin' | 'trainer'
+  hideTrainerFilter?: boolean
 }
 
 export function WeeklyView({
@@ -30,6 +32,8 @@ export function WeeklyView({
   onSelectTrainer,
   selectedDate,
   onStatusChange,
+  viewAs = 'admin',
+  hideTrainerFilter = false,
 }: WeeklyViewProps) {
   const weekStart = startOfWeek(selectedDate, { weekStartsOn: 0 })
   const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
@@ -45,24 +49,26 @@ export function WeeklyView({
   return (
     <div className="space-y-4">
       {/* 트레이너 필터 */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <span className="text-xs text-slate-400 shrink-0">트레이너</span>
-        {trainers.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            onClick={() => onSelectTrainer(t.id)}
-            className={cn(
-              'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150 cursor-pointer',
-              selectedTrainerId === t.id
-                ? 'bg-emerald-500 text-white'
-                : 'bg-white/8 text-slate-300 hover:bg-white/13 hover:text-white',
-            )}
-          >
-            {t.profiles.name}
-          </button>
-        ))}
-      </div>
+      {!hideTrainerFilter && (
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs text-slate-400 shrink-0">트레이너</span>
+          {trainers.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => onSelectTrainer(t.id)}
+              className={cn(
+                'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150 cursor-pointer',
+                selectedTrainerId === t.id
+                  ? 'bg-emerald-500 text-white'
+                  : 'bg-white/8 text-slate-300 hover:bg-white/13 hover:text-white',
+              )}
+            >
+              {t.profiles.name}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* 주간 그리드 */}
       <div className="overflow-x-auto rounded-2xl border border-white/12 bg-white/4">
@@ -110,7 +116,7 @@ export function WeeklyView({
                       {res && (
                         <ReservationCard
                           reservation={res}
-                          viewAs="admin"
+                          viewAs={viewAs}
                           showActions
                           onStatusChange={onStatusChange}
                           className="text-xs"

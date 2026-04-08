@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronLeft, Calendar } from "lucide-react";
+import { ChevronLeft, Calendar, ClipboardList } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { TrainerForm } from "@/components/forms/trainer-form";
 import { Badge } from "@/components/ui/badge";
@@ -117,12 +117,21 @@ export default async function TrainerDetailPage({ params }: Props) {
             <Calendar className="w-4 h-4 text-emerald-400" />
             스케줄
           </h2>
-          <Link
-            href={`/admin/trainers/${trainer.id}/schedule`}
-            className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
-          >
-            설정 →
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href={`/admin/trainers/${trainer.id}/reservations`}
+              className="inline-flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 transition-colors"
+            >
+              <ClipboardList className="w-3.5 h-3.5" />
+              예약 관리
+            </Link>
+            <Link
+              href={`/admin/trainers/${trainer.id}/schedule`}
+              className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
+            >
+              설정 →
+            </Link>
+          </div>
         </div>
 
         {/* 근무 요일 */}

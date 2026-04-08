@@ -15,9 +15,10 @@ interface DailyViewProps {
   reservations: ReservationWithDetails[]
   trainers: TrainerWithProfile[]
   onStatusChange: () => void
+  viewAs?: 'admin' | 'trainer'
 }
 
-export function DailyView({ reservations, trainers, onStatusChange }: DailyViewProps) {
+export function DailyView({ reservations, trainers, onStatusChange, viewAs = 'admin' }: DailyViewProps) {
   if (trainers.length === 0) {
     return (
       <div className="flex items-center justify-center h-48 text-slate-500 text-sm">
@@ -72,7 +73,7 @@ export function DailyView({ reservations, trainers, onStatusChange }: DailyViewP
                     {res && (
                       <ReservationCard
                         reservation={res}
-                        viewAs="admin"
+                        viewAs={viewAs}
                         showActions
                         onStatusChange={onStatusChange}
                         className="text-xs"

@@ -91,6 +91,7 @@ export async function approveReservation(reservationId: string): Promise<SimpleR
 
   revalidatePath('/my-schedule')
   revalidatePath('/admin/schedule')
+  revalidatePath('/admin/trainers', 'layout')
   return { success: true }
 }
 
@@ -106,6 +107,7 @@ export async function rejectReservation(reservationId: string): Promise<SimpleRe
 
   revalidatePath('/my-schedule')
   revalidatePath('/admin/schedule')
+  revalidatePath('/admin/trainers', 'layout')
   return { success: true }
 }
 

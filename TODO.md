@@ -245,12 +245,12 @@
   - [x] 트레이너 버튼 필터 (주간 뷰)
   - [x] Supabase Realtime 실시간 업데이트
     - [x] `hooks/use-realtime-reservations.ts`
-<!-- 세션 5-C: 트레이너 스케줄 + 예약 요청 페이지 -->
-- [ ] 트레이너 전용 스케줄 + 예약 요청 페이지 (`app/(admin)/admin/trainers/[id]/reservations/page.tsx`)
-  - [ ] 본인 스케줄 (일/주 뷰, reservation-card 재사용)
-  - [ ] PT 예약 요청 목록
-    - [ ] pending 상태 예약 리스트
-    - [ ] 승인/거부 버튼 (5-A 액션 연결)
+<!-- 세션 5-C: 트레이너 스케줄 + 예약 요청 페이지 ✅ -->
+- [x] 트레이너 전용 스케줄 + 예약 요청 페이지 (`app/(admin)/admin/trainers/[id]/reservations/page.tsx`)
+  - [x] 본인 스케줄 (일/주 뷰, reservation-card 재사용)
+  - [x] PT 예약 요청 목록
+    - [x] pending 상태 예약 리스트
+    - [x] 승인/거부 버튼 (5-A 액션 연결)
 <!-- 세션 5-D: 사용자 내 스케줄 페이지 -->
 - [ ] 사용자 내 스케줄 페이지 (`app/(user)/my-schedule/page.tsx`)
   - [ ] 잔여 세션 프로그레스 바
