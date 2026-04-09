@@ -280,16 +280,16 @@
   - [x] `createReservation` — 세션 차감 없는 단순 생성으로 교체 (`create_reservation_with_session_decrement` → 직접 INSERT)
   - [x] `completeReservation` 신규 액션 — status → `completed` + `remaining_sessions` 1 차감
 
-<!-- 세션 5.5-B: 트레이너 레이아웃 + 스케줄 화면 -->
-- [ ] 트레이너 레이아웃
-  - [ ] `app/(trainer)/layout.tsx` 트레이너 전용 라우트 그룹
-  - [ ] `components/layout/trainer-tab-bar.tsx` 하단 탭바 (스케줄, 회원, 프로필)
-  - [ ] proxy.ts — `/trainer` 경로 role 체크 확인 (이미 구현, 진입점 연결만)
-- [ ] 트레이너 스케줄 메인 (`app/(trainer)/trainer/schedule/page.tsx`)
-  - [ ] 월/주/일 뷰 탭 (관리자 전체 스케줄 컴포넌트 재사용)
-  - [ ] 본인 예약만 필터링
-  - [ ] 담당 회원 배정(생성) 버튼 → 날짜/시간 + 담당 회원 선택 모달
-  - [ ] `createReservation` 액션 연결
+<!-- 세션 5.5-B: 트레이너 레이아웃 + 스케줄 화면 ✅ -->
+- [x] 트레이너 레이아웃
+  - [x] `app/(trainer)/layout.tsx` 트레이너 전용 라우트 그룹
+  - [x] `components/layout/trainer-tab-bar.tsx` 하단 탭바 (스케줄, 회원, 프로필)
+  - [x] proxy.ts — `/trainer` 경로 role 체크 확인 (이미 구현, 진입점 연결만)
+- [x] 트레이너 스케줄 메인 (`app/(trainer)/trainer/schedule/page.tsx`)
+  - [x] 월/주/일 뷰 탭 (관리자 전체 스케줄 컴포넌트 재사용)
+  - [x] 본인 예약만 필터링
+  - [x] 담당 회원 배정(생성) 버튼 → 날짜/시간 + 담당 회원 선택 모달
+  - [x] `createReservation` 액션 연결
 
 <!-- 세션 5.5-C: 오늘 PT 목록 + 완료 처리 -->
 - [ ] 오늘 PT 목록 (`app/(trainer)/trainer/schedule/_components/today-sessions.tsx`)

@@ -31,8 +31,8 @@ function ReservationCard({
   const [actionError, setActionError] = useState<string | null>(null)
 
   const { reservation_date, start_time, end_time, status } = reservation
-  const memberName = reservation.members.profiles.name
-  const trainerName = reservation.trainers.profiles.name
+  const memberName = reservation.members?.profiles?.name ?? '알 수 없음'
+  const trainerName = reservation.trainers?.profiles?.name ?? '알 수 없음'
 
   // "HH:mm:ss" → "HH:mm"
   const fmt = (t: string) => t.slice(0, 5)

@@ -28,7 +28,7 @@ export async function signInWithPassword(formData: FormData) {
   if (profile?.role === 'admin') {
     redirect('/admin')
   } else if (profile?.role === 'trainer') {
-    redirect('/trainer')
+    redirect('/trainer/schedule')
   } else {
     redirect('/trainers')
   }
