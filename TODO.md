@@ -291,11 +291,11 @@
   - [x] 담당 회원 배정(생성) 버튼 → 날짜/시간 + 담당 회원 선택 모달
   - [x] `createReservation` 액션 연결
 
-<!-- 세션 5.5-C: 오늘 PT 목록 + 완료 처리 -->
-- [ ] 오늘 PT 목록 (`app/(trainer)/trainer/schedule/_components/today-sessions.tsx`)
-  - [ ] 당일 예약 리스트
-  - [ ] 완료 처리 버튼 → `completeReservation` 액션 연결 → 세션 차감
-  - [ ] 완료 확인 모달
+<!-- 세션 5.5-C: 오늘 PT 목록 + 완료 처리 ✅ -->
+- [x] 오늘 PT 목록 (`app/(trainer)/trainer/schedule/_components/today-sessions.tsx`)
+  - [x] 당일 예약 리스트
+  - [x] 완료 처리 버튼 → `completeReservation` 액션 연결 → 세션 차감
+  - [x] 완료 확인 모달
 
 <!-- 세션 5.5-D: 담당 회원 목록 + 상세 -->
 - [ ] 담당 회원 목록 (`app/(trainer)/trainer/members/page.tsx`)

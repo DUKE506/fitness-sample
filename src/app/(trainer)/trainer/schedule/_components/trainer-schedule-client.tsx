@@ -8,6 +8,7 @@ import { DailyView } from '@/app/(admin)/admin/schedule/_components/daily-view'
 import { WeeklyView } from '@/app/(admin)/admin/schedule/_components/weekly-view'
 import { MonthlyView } from '@/app/(admin)/admin/schedule/_components/monthly-view'
 import { CreateReservationModal } from './create-reservation-modal'
+import { TodaySessions } from './today-sessions'
 import { Spinner } from '@/components/ui/spinner'
 import { cn } from '@/lib/utils/cn'
 import {
@@ -111,6 +112,12 @@ export function TrainerScheduleClient({ trainer, members }: TrainerScheduleClien
     setViewMode('daily')
   }
 
+  const todayStr = toDateString(new Date())
+  const isViewingToday = viewMode === 'daily' && toDateString(selectedDate) === todayStr
+  const todayConfirmed = reservations.filter(
+    (r) => r.reservation_date === todayStr && r.status === 'confirmed',
+  )
+
   return (
     <div className="p-6 lg:p-8 space-y-6">
       {/* 헤더 */}
@@ -192,6 +199,14 @@ export function TrainerScheduleClient({ trainer, members }: TrainerScheduleClien
           <RefreshCw className="w-4 h-4" />
         </button>
       </div>
+
+      {/* 오늘 PT 목록 (일간 뷰 + 오늘인 경우만) */}
+      {isViewingToday && (
+        <TodaySessions
+          reservations={todayConfirmed}
+          onStatusChange={fetchReservations}
+        />
+      )}
 
       {/* 뷰 컨텐츠 */}
       {viewMode === 'daily' && (
