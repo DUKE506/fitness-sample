@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogFooter } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils/cn'
 import { RESERVATION_STATUS_LABEL } from '@/lib/constants'
-import { approveReservation, rejectReservation, cancelReservation } from '@/actions/reservations'
+import { cancelReservation } from '@/actions/reservations'
 import type { ReservationWithDetails } from '@/lib/types'
 import type { ReservationStatus } from '@/lib/constants'
 
@@ -52,10 +52,8 @@ function ReservationCard({
     })
   }
 
-  const canApproveReject =
-    showActions && (viewAs === 'admin' || viewAs === 'trainer') && status === 'pending'
   const canCancel =
-    showActions && (viewAs === 'admin' || viewAs === 'member') && status === 'confirmed'
+    showActions && (viewAs === 'admin' || viewAs === 'trainer') && status === 'confirmed'
 
   return (
     <>
@@ -129,38 +127,16 @@ function ReservationCard({
           )}
         </div>
 
-        {(canApproveReject || canCancel) && (
+        {canCancel && (
           <DialogFooter>
-            {canApproveReject && (
-              <>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  disabled={isPending}
-                  onClick={() => handleAction(rejectReservation)}
-                >
-                  거부
-                </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  disabled={isPending}
-                  onClick={() => handleAction(approveReservation)}
-                >
-                  승인
-                </Button>
-              </>
-            )}
-            {canCancel && (
-              <Button
-                variant="danger"
-                size="sm"
-                disabled={isPending}
-                onClick={() => handleAction(cancelReservation)}
-              >
-                예약 취소
-              </Button>
-            )}
+            <Button
+              variant="danger"
+              size="sm"
+              disabled={isPending}
+              onClick={() => handleAction(cancelReservation)}
+            >
+              예약 취소
+            </Button>
           </DialogFooter>
         )}
       </Dialog>

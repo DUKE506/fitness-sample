@@ -2,13 +2,12 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Users, Calendar, ClipboardList, User } from 'lucide-react'
+import { Users, Calendar, User } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 
 const TAB_ITEMS = [
   { href: '/trainers', icon: Users, label: '트레이너' },
   { href: '/my-schedule', icon: Calendar, label: '내 스케줄' },
-  { href: '/apply', icon: ClipboardList, label: 'PT 신청' },
   { href: '/profile', icon: User, label: '프로필' },
 ]
 

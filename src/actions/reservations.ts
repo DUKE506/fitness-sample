@@ -11,120 +11,149 @@ type SimpleResult =
   | { success: true }
   | { success: false; error: string }
 
+// 트레이너/관리자가 회원의 예약을 직접 생성 (세션 차감 없음)
 export async function createReservation(
+  memberId: string,
   trainerId: string,
+  ptPackageId: string | null,
   date: string,       // "YYYY-MM-DD"
   startTime: string,  // "HH:mm:ss"
   endTime: string,    // "HH:mm:ss"
 ): Promise<ActionResult> {
   const supabase = await createClient()
 
-  // 현재 로그인 유저 확인
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) {
     return { success: false, error: '로그인이 필요합니다.' }
   }
 
-  // members 테이블에서 member_id 조회
-  const { data: member, error: memberError } = await supabase
-    .from('members')
-    .select('id')
-    .eq('profile_id', user.id)
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
     .single()
 
-  if (memberError || !member) {
-    return { success: false, error: '회원 정보를 찾을 수 없습니다.' }
+  if (profile?.role !== 'trainer' && profile?.role !== 'admin') {
+    return { success: false, error: '트레이너 또는 관리자만 예약을 생성할 수 있습니다.' }
   }
 
-  // 활성 PT 패키지 조회 (해당 트레이너)
-  const { data: pkg, error: pkgError } = await supabase
-    .from('pt_packages')
-    .select('id')
-    .eq('member_id', member.id)
-    .eq('trainer_id', trainerId)
-    .eq('status', 'active')
-    .gt('remaining_sessions', 0)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .single()
-
-  if (pkgError || !pkg) {
-    return {
-      success: false,
-      error: '담당 트레이너의 활성 PT 패키지가 없습니다. 관리자에게 문의해주세요.',
-    }
-  }
-
-  // 예약 생성 RPC 호출
-  const { data: reservationId, error: rpcError } = await supabase.rpc(
-    'create_reservation_with_session_decrement',
-    {
-      p_member_id: member.id,
-      p_trainer_id: trainerId,
-      p_pt_package_id: pkg.id,
-      p_date: date,
-      p_start_time: startTime,
-      p_end_time: endTime,
-    },
-  )
-
-  if (rpcError) {
-    if (rpcError.message.includes('No remaining sessions')) {
-      return { success: false, error: '잔여 PT 세션이 없습니다.' }
-    }
-    return { success: false, error: rpcError.message }
-  }
-
-  revalidatePath('/my-schedule')
-  return { success: true, reservationId: reservationId as string }
-}
-
-export async function approveReservation(reservationId: string): Promise<SimpleResult> {
-  const supabase = await createClient()
-
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('reservations')
-    .update({ status: 'confirmed', updated_at: new Date().toISOString() })
-    .eq('id', reservationId)
+    .insert({
+      member_id: memberId,
+      trainer_id: trainerId,
+      pt_package_id: ptPackageId,
+      reservation_date: date,
+      start_time: startTime,
+      end_time: endTime,
+      status: 'confirmed',
+    })
+    .select('id')
+    .single()
 
   if (error) return { success: false, error: error.message }
 
-  revalidatePath('/my-schedule')
   revalidatePath('/admin/schedule')
   revalidatePath('/admin/trainers', 'layout')
-  return { success: true }
+  revalidatePath('/trainer/schedule')
+  return { success: true, reservationId: data.id }
 }
 
-export async function rejectReservation(reservationId: string): Promise<SimpleResult> {
+// 예약 완료 처리 — status → 'completed' + pt_package remaining_sessions 1 차감
+export async function completeReservation(reservationId: string): Promise<SimpleResult> {
   const supabase = await createClient()
 
-  const { error } = await supabase
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  if (authError || !user) return { success: false, error: '로그인이 필요합니다.' }
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  if (profile?.role !== 'trainer' && profile?.role !== 'admin') {
+    return { success: false, error: '트레이너 또는 관리자만 완료 처리할 수 있습니다.' }
+  }
+
+  // 예약 조회 (pt_package_id 필요)
+  const { data: reservation, error: fetchError } = await supabase
     .from('reservations')
-    .update({ status: 'rejected', updated_at: new Date().toISOString() })
+    .select('pt_package_id, status')
+    .eq('id', reservationId)
+    .single()
+
+  if (fetchError || !reservation) {
+    return { success: false, error: '예약 정보를 찾을 수 없습니다.' }
+  }
+
+  if (reservation.status !== 'confirmed') {
+    return { success: false, error: '확정된 예약만 완료 처리할 수 있습니다.' }
+  }
+
+  // status → 'completed'
+  const { error: updateError } = await supabase
+    .from('reservations')
+    .update({ status: 'completed', updated_at: new Date().toISOString() })
     .eq('id', reservationId)
 
-  if (error) return { success: false, error: error.message }
+  if (updateError) return { success: false, error: updateError.message }
 
-  revalidatePath('/my-schedule')
+  // PT 패키지 세션 차감
+  if (reservation.pt_package_id) {
+    const { data: pkg } = await supabase
+      .from('pt_packages')
+      .select('remaining_sessions')
+      .eq('id', reservation.pt_package_id)
+      .single()
+
+    if (pkg && pkg.remaining_sessions > 0) {
+      await supabase
+        .from('pt_packages')
+        .update({
+          remaining_sessions: pkg.remaining_sessions - 1,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', reservation.pt_package_id)
+    }
+  }
+
   revalidatePath('/admin/schedule')
   revalidatePath('/admin/trainers', 'layout')
+  revalidatePath('/trainer/schedule')
   return { success: true }
 }
 
+// 예약 취소 — 트레이너/관리자만 가능, 세션 복구 없음
 export async function cancelReservation(reservationId: string): Promise<SimpleResult> {
   const supabase = await createClient()
 
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) return { success: false, error: '로그인이 필요합니다.' }
 
-  const { error } = await supabase.rpc('cancel_reservation_with_session_restore', {
-    p_reservation_id: reservationId,
-    p_cancel_reason: undefined,
-  })
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  if (profile?.role !== 'trainer' && profile?.role !== 'admin') {
+    return { success: false, error: '트레이너 또는 관리자만 예약을 취소할 수 있습니다.' }
+  }
+
+  const { error } = await supabase
+    .from('reservations')
+    .update({
+      status: 'cancelled',
+      cancelled_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', reservationId)
 
   if (error) return { success: false, error: error.message }
 
-  revalidatePath('/my-schedule')
   revalidatePath('/admin/schedule')
+  revalidatePath('/admin/trainers', 'layout')
+  revalidatePath('/trainer/schedule')
   return { success: true }
 }

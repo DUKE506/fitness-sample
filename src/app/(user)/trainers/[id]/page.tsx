@@ -6,7 +6,6 @@ import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { SpecialtyBadge } from '@/components/trainer/specialty-badge'
-import { cn } from '@/lib/utils/cn'
 import { formatCurrency } from '@/lib/utils/format'
 import { addDays } from '@/lib/utils/date'
 import type { TrainerWithProfile, AvailableSlot } from '@/lib/types'
@@ -58,7 +57,7 @@ export default async function TrainerDetailPage({ params }: PageProps) {
   const { profiles, bio, specialties, career_years, certifications, hourly_rate } = trainer
 
   return (
-    <div className="px-4 py-6 pb-44 space-y-4">
+    <div className="px-4 py-6 pb-28 space-y-4">
       {/* 뒤로가기 */}
       <Link
         href="/trainers"
@@ -181,22 +180,6 @@ export default async function TrainerDetailPage({ params }: PageProps) {
         )}
       </div>
 
-      {/* 하단 sticky CTA */}
-      <div className="fixed bottom-24 left-0 right-0 flex justify-center px-4 z-10">
-        <Link
-          href={`/apply?trainer=${id}`}
-          className={cn(
-            'w-full max-w-sm inline-flex items-center justify-center',
-            'rounded-xl border border-transparent font-medium text-base',
-            'cursor-pointer transition-colors duration-200',
-            'bg-emerald-500 hover:bg-emerald-600 text-white',
-            'px-6 py-3',
-            'shadow-[0_8px_32px_rgba(16,185,129,0.3)]'
-          )}
-        >
-          PT 신청하기
-        </Link>
-      </div>
     </div>
   )
 }

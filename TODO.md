@@ -268,16 +268,17 @@
 
 > 기존 회원 주도 PT 신청 플로우를 트레이너 주도로 전환하고, 트레이너 전용 화면을 신규 구현
 
-<!-- 세션 5.5-A: 기존 코드 제거 + 액션 개편 -->
-- [ ] 기존 회원 주도 플로우 제거
-  - [ ] `app/(user)/apply/` 디렉토리 전체 삭제
-  - [ ] 회원 탭바에서 "PT신청" 탭 제거 (`components/layout/user-tab-bar.tsx`)
-  - [ ] `actions/reservations.ts`에서 `approveReservation`, `rejectReservation` 제거
-  - [ ] 회원 `/my-schedule`에서 예약 취소/변경 버튼 제거
-  - [ ] `cancelReservation` 액션 — 트레이너/관리자만 호출 가능하도록 role 체크 추가
-- [ ] 예약 생성 액션 개편
-  - [ ] `createReservation` — 세션 차감 없는 단순 생성으로 교체 (`create_reservation_with_session_decrement` → 직접 INSERT)
-  - [ ] `completeReservation` 신규 액션 — status → `completed` + `remaining_sessions` 1 차감
+<!-- 세션 5.5-A: 기존 코드 제거 + 액션 개편 ✅ -->
+- [x] 기존 회원 주도 플로우 제거
+  - [x] `app/(user)/apply/` 디렉토리 전체 삭제
+  - [x] 회원 탭바에서 "PT신청" 탭 제거 (`components/layout/user-tab-bar.tsx`)
+  - [x] `actions/reservations.ts`에서 `approveReservation`, `rejectReservation` 제거
+  - [x] 회원 `/my-schedule`에서 예약 취소/변경 버튼 제거
+  - [x] `cancelReservation` 액션 — 트레이너/관리자만 호출 가능하도록 role 체크 추가
+  - [x] 트레이너 상세 페이지 "PT 신청하기" 버튼 제거 (`app/(user)/trainers/[id]/page.tsx`)
+- [x] 예약 생성 액션 개편
+  - [x] `createReservation` — 세션 차감 없는 단순 생성으로 교체 (`create_reservation_with_session_decrement` → 직접 INSERT)
+  - [x] `completeReservation` 신규 액션 — status → `completed` + `remaining_sessions` 1 차감
 
 <!-- 세션 5.5-B: 트레이너 레이아웃 + 스케줄 화면 -->
 - [ ] 트레이너 레이아웃

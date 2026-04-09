@@ -1,11 +1,8 @@
 'use client'
 
-import { useState, useTransition } from 'react'
-import { useRouter } from 'next/navigation'
-import { Dumbbell, CalendarX, ArrowRightLeft, CalendarClock } from 'lucide-react'
+import { Dumbbell, CalendarX, CalendarClock } from 'lucide-react'
 import { ReservationCard } from '@/components/schedule/reservation-card'
 import { DDayBadge } from '@/components/schedule/d-day-badge'
-import { cancelReservation } from '@/actions/reservations'
 import { cn } from '@/lib/utils/cn'
 import type { ReservationWithDetails, PtPackageWithTrainer } from '@/lib/types'
 
@@ -39,68 +36,6 @@ function PackageProgressBar({
   )
 }
 
-function RescheduleButton({ reservationId }: { reservationId: string }) {
-  const router = useRouter()
-  const [confirming, setConfirming] = useState(false)
-  const [isPending, startTransition] = useTransition()
-  const [error, setError] = useState<string | null>(null)
-
-  function handleConfirm() {
-    setError(null)
-    startTransition(async () => {
-      const result = await cancelReservation(reservationId)
-      if (result.success) {
-        router.push('/apply')
-      } else {
-        setError(result.error ?? '오류가 발생했습니다.')
-        setConfirming(false)
-      }
-    })
-  }
-
-  if (confirming) {
-    return (
-      <div className="flex items-center gap-2 justify-end mt-2">
-        {error && <p className="text-xs text-red-400 mr-auto">{error}</p>}
-        <span className="text-xs text-slate-400">기존 예약을 취소하고 다시 신청할까요?</span>
-        <button
-          type="button"
-          onClick={() => setConfirming(false)}
-          disabled={isPending}
-          className="text-xs text-slate-400 hover:text-white transition-colors px-2 py-1"
-        >
-          아니오
-        </button>
-        <button
-          type="button"
-          onClick={handleConfirm}
-          disabled={isPending}
-          className={cn(
-            'text-xs px-3 py-1 rounded-lg font-medium transition-all duration-200',
-            isPending
-              ? 'bg-white/8 text-slate-500 cursor-not-allowed'
-              : 'bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30',
-          )}
-        >
-          {isPending ? '처리 중...' : '예, 변경할게요'}
-        </button>
-      </div>
-    )
-  }
-
-  return (
-    <div className="flex justify-end mt-2">
-      <button
-        type="button"
-        onClick={() => setConfirming(true)}
-        className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-200 transition-colors px-2 py-1"
-      >
-        <ArrowRightLeft className="w-3.5 h-3.5" />
-        예약 변경
-      </button>
-    </div>
-  )
-}
 
 export function MyScheduleClient({ activePackage, reservations }: Props) {
   const today = new Date()
@@ -201,24 +136,16 @@ export function MyScheduleClient({ activePackage, reservations }: Props) {
           <div className="flex flex-col items-center justify-center py-10 gap-3 bg-white/3 border border-white/8 rounded-2xl">
             <CalendarX className="w-8 h-8 text-slate-600" />
             <p className="text-sm text-slate-500">예정된 예약이 없습니다.</p>
-            <a
-              href="/apply"
-              className="text-xs font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
-            >
-              PT 신청하기
-            </a>
           </div>
         ) : (
           <div className="space-y-3">
             {upcoming.map((reservation) => (
-              <div key={reservation.id}>
-                <ReservationCard
-                  reservation={reservation}
-                  viewAs="member"
-                  showActions={true}
-                />
-                <RescheduleButton reservationId={reservation.id} />
-              </div>
+              <ReservationCard
+                key={reservation.id}
+                reservation={reservation}
+                viewAs="member"
+                showActions={false}
+              />
             ))}
           </div>
         )}
