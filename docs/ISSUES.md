@@ -2,6 +2,79 @@
 
 ---
 
+## [RESOLVED] RLS 정책 추가 후 트레이너 로그인 시 `/trainers`로 리다이렉트
+
+**발생 일자**: 2026-04-09
+**해결 일자**: 2026-04-09
+
+**재현 경로**: 트레이너 로그인 → `signInWithPassword` → `redirect('/trainer/schedule')` 대신 `redirect('/trainers')`로 이동
+
+**증상**:
+
+- `"Trainers can view assigned members profiles"` RLS 정책 추가 후 트레이너 로그인 시 `/trainers`로 이동
+- Supabase 대시보드에서 해당 계정의 `profiles.role = 'trainer'` 확인됨에도 불구하고 발생
+
+**진단**:
+
+`auth.ts`에 디버깅 로그 추가 후 확인한 터미널 출력:
+
+```
+[auth.ts] user.id: 1a768f03-40c3-4711-b489-6342b23b0bf0
+[auth.ts] profile: null
+[auth.ts] profileError: {"code":"42P17","details":null,"hint":null,"message":"infinite recursion detected in policy for relation \"profiles\""}
+```
+
+**원인**:
+
+추가한 RLS 정책이 profiles 테이블 SELECT 평가 중 무한 재귀를 유발.
+
+```sql
+-- 문제가 된 정책
+CREATE POLICY "Trainers can view assigned members profiles"
+  ON public.profiles FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.members m
+      JOIN public.trainers t ON t.id = m.assigned_trainer_id
+      WHERE m.profile_id = profiles.id AND t.profile_id = auth.uid()
+    )
+  );
+```
+
+`t.profile_id = auth.uid()` 평가 시 trainers → profiles FK 참조로 인해 profiles RLS가 재귀 호출됨.
+
+과거 동일 패턴: `"Admin full access to profiles"` 정책에서도 동일한 `42P17` 에러 발생 → `get_my_role()` SECURITY DEFINER 함수로 해결.
+
+**해결**:
+
+정책을 삭제하고 SECURITY DEFINER 함수를 통해 RLS 재귀를 우회.
+
+```sql
+DROP POLICY "Trainers can view assigned members profiles" ON public.profiles;
+
+CREATE OR REPLACE FUNCTION public.get_my_trainer_id()
+RETURNS uuid LANGUAGE sql STABLE SECURITY DEFINER AS $$
+  SELECT id FROM public.trainers WHERE profile_id = auth.uid()
+$$;
+
+CREATE POLICY "Trainers can view assigned members profiles"
+  ON public.profiles FOR SELECT
+  USING (
+    id IN (
+      SELECT m.profile_id FROM public.members m
+      WHERE m.assigned_trainer_id = public.get_my_trainer_id()
+    )
+  );
+```
+
+**교훈**:
+
+profiles 테이블 RLS 정책 작성 시 직접적인 profiles 참조뿐 아니라 FK를 통한 간접 참조도 재귀를 유발할 수 있음. profiles RLS 내부에서 다른 테이블을 JOIN하거나 auth.uid()와 비교할 경우 반드시 SECURITY DEFINER 함수로 분리할 것.
+
+---
+
+---
+
 ## [RESOLVED] 예약 취소 — RLS 미설정으로 회원의 cancelReservation 무응답
 
 **발생 일자**: 2026-04-08

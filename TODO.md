@@ -297,14 +297,14 @@
   - [x] 완료 처리 버튼 → `completeReservation` 액션 연결 → 세션 차감
   - [x] 완료 확인 모달
 
-<!-- 세션 5.5-D: 담당 회원 목록 + 상세 -->
-- [ ] 담당 회원 목록 (`app/(trainer)/trainer/members/page.tsx`)
-  - [ ] 본인 담당 회원 리스트
-  - [ ] 회원 이름, 잔여 세션, 다음 예약일 표시
-- [ ] 담당 회원 상세 (`app/(trainer)/trainer/members/[id]/page.tsx`)
-  - [ ] 기본 정보 (이름, 연락처)
-  - [ ] PT 패키지 현황 (전체 세션, 잔여, 사용 횟수)
-  - [ ] 예약 이력
+<!-- 세션 5.5-D: 담당 회원 목록 + 상세 ✅ -->
+- [x] 담당 회원 목록 (`app/(trainer)/trainer/members/page.tsx`)
+  - [x] 본인 담당 회원 리스트
+  - [x] 회원 이름, 잔여 세션, 다음 예약일 표시
+- [x] 담당 회원 상세 (`app/(trainer)/trainer/members/[id]/page.tsx`)
+  - [x] 기본 정보 (이름, 연락처)
+  - [x] PT 패키지 현황 (전체 세션, 잔여, 사용 횟수)
+  - [x] 예약 이력
 
 <!-- 세션 5.5-E: 트레이너 프로필 수정 -->
 - [ ] 트레이너 프로필 수정 (`app/(trainer)/trainer/profile/page.tsx`)
