@@ -5,9 +5,11 @@ import { Plus } from 'lucide-react'
 import { Dialog, DialogFooter } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
+import { Spinner } from '@/components/ui/spinner'
 import { cn } from '@/lib/utils/cn'
 import { createClient } from '@/lib/supabase/client'
 import { createReservation } from '@/actions/reservations'
+import { useAvailableSlots } from '@/hooks/use-available-slots'
 import type { MemberWithProfile } from '@/lib/types'
 
 interface PtPackageOption {
@@ -38,6 +40,8 @@ export function CreateReservationModal({
   const [date, setDate] = useState('')
   const [startTime, setStartTime] = useState('')
   const [endTime, setEndTime] = useState('')
+
+  const { slots, loading: slotsLoading } = useAvailableSlots(trainerId, date || null)
 
   // 회원 선택 시 해당 회원의 활성 PT 패키지 조회
   useEffect(() => {
@@ -77,6 +81,11 @@ export function CreateReservationModal({
     setDate('')
     setStartTime('')
     setEndTime('')
+  }
+
+  function handleSlotSelect(slot: { start_time: string; end_time: string }) {
+    setStartTime(slot.start_time.slice(0, 5))
+    setEndTime(slot.end_time.slice(0, 5))
   }
 
   function handleSubmit() {
@@ -160,7 +169,7 @@ export function CreateReservationModal({
             <input
               type="date"
               value={date}
-              onChange={(e) => setDate(e.target.value)}
+              onChange={(e) => { setDate(e.target.value); setStartTime(''); setEndTime('') }}
               className={cn(
                 'w-full bg-white/6 border border-white/12 rounded-xl',
                 'px-4 py-2.5 text-white text-sm',
@@ -171,39 +180,51 @@ export function CreateReservationModal({
             />
           </div>
 
-          {/* 시간 */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-slate-300">시작 시간</label>
-              <input
-                type="time"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                className={cn(
-                  'w-full bg-white/6 border border-white/12 rounded-xl',
-                  'px-4 py-2.5 text-white text-sm',
-                  'focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30',
-                  'transition-colors duration-200',
-                  '[color-scheme:dark]',
+          {/* 시간 슬롯 */}
+          {date && (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-slate-300">시간 선택</label>
+                {startTime && (
+                  <span className="text-xs text-emerald-400">
+                    {startTime} – {endTime}
+                  </span>
                 )}
-              />
+              </div>
+              {slotsLoading ? (
+                <div className="flex justify-center py-4">
+                  <Spinner size="sm" />
+                </div>
+              ) : slots.length === 0 ? (
+                <p className="text-sm text-slate-500 py-3 text-center">
+                  해당 날짜에 가능한 시간이 없습니다.
+                </p>
+              ) : (
+                <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto pr-1">
+                  {slots.map((slot) => {
+                    const s = slot.start_time.slice(0, 5)
+                    const e = slot.end_time.slice(0, 5)
+                    const selected = startTime === s && endTime === e
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => handleSlotSelect(slot)}
+                        className={cn(
+                          'px-3 py-2 rounded-xl text-xs font-medium transition-colors duration-150 cursor-pointer',
+                          selected
+                            ? 'bg-emerald-500 text-white'
+                            : 'bg-white/6 border border-white/12 text-slate-300 hover:bg-white/10 hover:text-white',
+                        )}
+                      >
+                        {s}
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
             </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-slate-300">종료 시간</label>
-              <input
-                type="time"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-                className={cn(
-                  'w-full bg-white/6 border border-white/12 rounded-xl',
-                  'px-4 py-2.5 text-white text-sm',
-                  'focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30',
-                  'transition-colors duration-200',
-                  '[color-scheme:dark]',
-                )}
-              />
-            </div>
-          </div>
+          )}
 
           {error && <p className="text-sm text-red-400">{error}</p>}
         </div>

@@ -108,6 +108,7 @@ export async function updateTrainer(trainerId: string, input: UpdateTrainerInput
 
   revalidatePath('/admin/trainers')
   revalidatePath(`/admin/trainers/${trainerId}`)
+  revalidatePath('/trainer/profile')
   return { success: true }
 }
 

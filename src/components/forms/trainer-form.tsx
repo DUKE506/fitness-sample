@@ -11,9 +11,11 @@ import type { TrainerWithProfile } from '@/lib/types'
 interface TrainerFormProps {
   /** 수정 모드일 때 기존 데이터 */
   trainer?: TrainerWithProfile
+  /** 저장 성공 후 이동할 경로 (기본값: '/admin/trainers') */
+  redirectTo?: string
 }
 
-export function TrainerForm({ trainer }: TrainerFormProps) {
+export function TrainerForm({ trainer, redirectTo }: TrainerFormProps) {
   const isEdit = !!trainer
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
@@ -72,7 +74,7 @@ export function TrainerForm({ trainer }: TrainerFormProps) {
       if (!result.success) {
         setError(result.error)
       } else {
-        router.push('/admin/trainers')
+        router.push(redirectTo ?? '/admin/trainers')
       }
     })
   }

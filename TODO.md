@@ -306,10 +306,13 @@
   - [x] PT 패키지 현황 (전체 세션, 잔여, 사용 횟수)
   - [x] 예약 이력
 
-<!-- 세션 5.5-E: 트레이너 프로필 수정 -->
-- [ ] 트레이너 프로필 수정 (`app/(trainer)/trainer/profile/page.tsx`)
-  - [ ] 소개글, 전문분야, 자격증, 경력 수정
-  - [ ] `actions/trainers.ts` 수정 액션 재사용
+<!-- 세션 5.5-E: 트레이너 프로필 수정 ✅ -->
+- [x] 트레이너 프로필 수정 (`app/(trainer)/trainer/profile/page.tsx`)
+  - [x] 소개글, 전문분야, 자격증, 경력 수정
+  - [x] `actions/trainers.ts` 수정 액션 재사용
+- [x] 예약 생성 모달 가용 슬롯 연동 (`create-reservation-modal.tsx`)
+  - [x] 날짜 선택 시 `get_available_slots` RPC 기반 슬롯 버튼 그리드 표시
+  - [x] 자유 시간 입력 제거 → 슬롯 클릭으로 시작/종료 시간 자동 세팅
 
 ---
 
